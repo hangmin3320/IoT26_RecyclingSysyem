@@ -5,7 +5,7 @@ Raspberry Pi 5 엣지 디바이스 기반 **스마트 분리수거 시스템**.
 AI 분류(**bottle / can / paper / glass / others**) → SQLite 기록/집계,
 그리고 **MediaMTX** 라이브 스트림 + **Flask 웹 대시보드**로 실시간 모니터링.
 
-> Gachon Univ. · Introduction to IoT (Prof. Jaehyuk Choi, Spring 2026) · Team Project
+> Gachon Univ. · Introduction to IoT (Prof. Jaehyuk Choi, Spring 2026) · Team Project.
 > 제출: **2026-06-16 18:00** / 데모: **2026-06-17**
 
 ---
