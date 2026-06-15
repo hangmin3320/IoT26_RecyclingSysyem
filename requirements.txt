@@ -1,0 +1,29 @@
+# AIoT Smart Recycling System — Python 의존성
+#
+# 중요(§13, §17): 가상환경은 반드시 시스템 패키지를 상속하도록 만든다.
+#   python3 -m venv --system-site-packages .venv
+# picamera2 / lgpio / smbus2 는 apt 로 설치된 것을 그대로 쓴다 (pip 설치 금지).
+#   sudo apt install -y python3-picamera2 python3-lgpio python3-gpiozero \
+#                       i2c-tools python3-smbus2
+#
+# 아래는 pip 로 관리하는 순수 파이썬/모델 의존성. 이미 시스템에 있으면 그대로 둔다.
+
+# --- 웹 ---
+Flask>=3.0
+
+# --- 비전 / 추론 ---
+# 이미 설치돼 있으면(torch 2.12.0+cpu, ultralytics 8.4.66, opencv 4.13.0)
+# 재설치하지 말 것 (§6, §18).
+ultralytics>=8.3
+opencv-python>=4.8        # apt python3-opencv 가 있으면 생략 가능
+numpy>=1.24
+
+# --- GPIO / I2C / 센서 (apt 설치 권장, 여기엔 참고용으로 명시) ---
+gpiozero>=2.0             # apt: python3-gpiozero
+lgpio>=0.2               # apt: python3-lgpio  (Pi 5 핀 팩토리)
+RPLCD>=1.3               # I2C 캐릭터 LCD
+smbus2>=0.4              # apt: python3-smbus2
+adafruit-circuitpython-dht>=4.0   # DHT22/DHT11
+
+# torch 는 ARM64 휠을 별도로 받아야 할 수 있어 명시하지 않는다.
+# 이미 torch 2.12.0+cpu 가 설치돼 있으므로 건드리지 말 것.

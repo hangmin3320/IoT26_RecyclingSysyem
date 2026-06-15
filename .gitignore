@@ -1,0 +1,60 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ===== 로그 =====
+*.log
+
+# ===== 로컬 전용 문서 (레포 제외, 로컬엔 유지) =====
+CLAUDE.md
+PROGRESS_REPORT.md
+
+# ===== 런타임 산출물 (앱 실행 시 재생성됨) =====
+captures/*.jpg
+captures/*.jpeg
+captures/*.png
+captures/boxed/
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.jpg          # camera_stream 라이브 스냅샷 (live_snapshot.jpg)
+data/*.jpeg
+data/*.png
+
+# ===== lgpio 런타임 notify 파이프 (Pi 5) =====
+.lgd-nfy*
+
+# ===== 모델 가중치 =====
+# 임의의 .pt 등은 무시하되, 프로젝트 모델(3MB)은 예외로 포함 → 클론만 하면 바로 실행 가능
+*.pt
+*.onnx
+*.tflite
+*.param
+*.bin
+!models/garbage_yolo11n_cls.pt
+
+# ===== MediaMTX (플랫폼별 별도 다운로드) =====
+mediamtx/mediamtx
+mediamtx/*.tar.gz
+mediamtx/LICENSE
+# MediaMTX 자동생성 인증서
+auto.crt
+auto.key
+
+# ===== 에디터 / OS =====
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# ===== 빈 폴더 유지용 .gitkeep 은 추적 =====
+!captures/.gitkeep
+!data/.gitkeep
+!models/.gitkeep
+!samples/.gitkeep

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIoT Smart Recycling System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <!-- HLS 재생 (MediaMTX HLS). 브라우저 호환을 위해 hls.js CDN 사용 -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>♻️ AIoT Smart Recycling System</h1>
+    <div class="status-pill" id="system-status">connecting…</div>
+  </header>
+
+  <main>
+    <!-- 상단: 라이브 스트림 -->
+    <section class="stream-section">
+      <div class="stream-wrap">
+        <video id="live" autoplay muted playsinline controls></video>
+        <div class="stream-overlay" id="stream-msg">스트림 연결 중…</div>
+      </div>
+      {% if mock_mode %}
+      <div class="mock-bar">
+        <span class="mock-tag">MOCK MODE</span>
+        <button id="mock-trigger" class="btn">🧪 Test Detect</button>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- 하단: 3개 패널 -->
+    <section class="panels">
+      <!-- 현재 센서 -->
+      <div class="panel">
+        <h2>현재 센서 <span class="sub">Current Sensors</span></h2>
+        <div class="sensor-grid">
+          <div class="metric"><span class="big" id="temp">--</span><span class="unit">°C</span><label>온도</label></div>
+          <div class="metric"><span class="big" id="hum">--</span><span class="unit">%</span><label>습도</label></div>
+          <div class="metric"><span class="big" id="dist">--</span><span class="unit">cm</span><label>거리</label></div>
+        </div>
+        <div class="badges">
+          <span class="badge" id="badge-dht">DHT</span>
+          <span class="badge" id="badge-ultrasonic">초음파</span>
+          <span class="badge" id="badge-camera">카메라</span>
+          <span class="badge" id="badge-lcd">LCD</span>
+        </div>
+        <div class="ts">업데이트: <span id="status-ts">--</span></div>
+      </div>
+
+      <!-- 최근 감지 -->
+      <div class="panel">
+        <h2>최근 감지 <span class="sub">Recent Detection</span></h2>
+        <div class="detection">
+          <div class="det-img-wrap">
+            <img id="det-img" alt="최근 감지 이미지" />
+            <div id="det-noimg" class="noimg">아직 감지 없음</div>
+          </div>
+          <div class="det-info">
+            <div class="det-label" id="det-label">--</div>
+            <div class="det-conf">신뢰도: <span id="det-conf">--</span></div>
+            <div class="det-meta" id="det-ts">--</div>
+            <div class="det-meta" id="det-env">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 누적 카운트 -->
+      <div class="panel">
+        <h2>누적 분류 <span class="sub">Cumulative Counts</span></h2>
+        <ul class="counts" id="counts">
+          {% for c in class_names %}
+          <li class="count-row" data-class="{{ c }}">
+            <span class="cname">{{ c }}</span>
+            <span class="cbar-wrap"><span class="cbar" id="bar-{{ c }}"></span></span>
+            <span class="cval" id="count-{{ c }}">0</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="total-row"><span>합계 Total</span><span class="total" id="count-total">0</span></div>
+      </div>
+    </section>
+
+    <!-- 감지 이력 -->
+    <section class="panel history-panel">
+      <h2>감지 이력 <span class="sub">Detection History</span></h2>
+      <div class="history-table-wrap">
+        <table class="history">
+          <thead>
+            <tr><th>시각</th><th>분류</th><th>신뢰도</th><th>온도</th><th>습도</th><th>이미지</th></tr>
+          </thead>
+          <tbody id="history-body">
+            <tr><td colspan="6" class="empty">이력 없음</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Gachon Univ. · Introduction to IoT · Team Project</span>
+  </footer>
+
+  <!-- 서버에서 주입한 스트림 설정 -->
+  <script>
+    window.STREAM_CFG = {
+      mode: "{{ stream_mode }}",
+      hlsPort: {{ hls_port }},
+      webrtcPort: {{ webrtc_port }},
+      path: "{{ stream_path }}",
+      mock: {{ 'true' if mock_mode else 'false' }}
+    };
+    window.CLASS_NAMES = {{ class_names | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

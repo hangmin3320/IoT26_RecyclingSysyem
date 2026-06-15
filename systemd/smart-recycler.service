@@ -1,0 +1,21 @@
+[Unit]
+Description=AIoT Smart Recycling System (Flask dashboard + detection loop)
+After=network.target mediamtx.service
+Wants=mediamtx.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/recycle
+# 시스템 파이썬에 모든 의존성이 설치돼 있으면 그대로 사용.
+# venv(--system-site-packages)를 만든 경우 아래를 /home/pi/recycle/.venv/bin/python 으로 바꾼다.
+ExecStart=/usr/bin/python3 /home/pi/recycle/app.py
+Restart=on-failure
+RestartSec=3
+# 운영 시 토큰/모드 등을 여기서 주입할 수 있다 (예시):
+# Environment=RESET_TOKEN=please-change
+# Environment=RECYCLER_MODEL_PATH=/home/pi/recycle/models/yolov8n_trash.pt
+# Environment=MOCK_MODE=False
+
+[Install]
+WantedBy=multi-user.target

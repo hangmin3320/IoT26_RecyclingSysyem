@@ -1,0 +1,14 @@
+[Unit]
+Description=MediaMTX (RTSP/HLS/WebRTC) for Smart Recycler
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/recycle
+ExecStart=/home/pi/recycle/mediamtx/mediamtx /home/pi/recycle/mediamtx/mediamtx.yml
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

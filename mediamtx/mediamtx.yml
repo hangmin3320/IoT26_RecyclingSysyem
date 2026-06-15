@@ -1,0 +1,49 @@
+# MediaMTX 설정 — AIoT Smart Recycling System (§10)
+#
+# camera_stream.py 가 rtsp://127.0.0.1:8554/cam 로 H264 영상을 publish 하면,
+# MediaMTX 가 이를 HLS(8888) / WebRTC(8889) 로 다시 내보내 대시보드가 재생한다.
+#
+# 실행:  ./mediamtx/mediamtx ./mediamtx/mediamtx.yml
+# 전체 옵션은 mediamtx.yml.default 참고. 여기서는 필요한 것만 둔다.
+
+logLevel: info
+logDestinations: [stdout]
+
+# --- API (선택, 디버깅용 비활성) ---
+api: false
+
+# --- RTSP: 카메라 publish 수신 ---
+rtsp: true
+rtspAddress: :8554
+rtspTransports: [tcp]
+
+# --- RTMP / SRT / MoQ: 미사용 (moq 비활성화로 auto.crt/auto.key 생성 방지) ---
+rtmp: false
+srt: false
+moq: false
+
+# --- HLS: 대시보드 기본 재생 경로 (브라우저 호환성 최우선) ---
+hls: true
+hlsAddress: :8888
+# mpegts: hls.js 와 가장 호환성이 좋고 데모에서 안정적 (지연 ~3-5s).
+#         더 낮은 지연이 필요하면 lowLatency 로 바꾸고 STREAM_MODE=webrtc 도 고려.
+hlsVariant: mpegts
+hlsSegmentCount: 7
+hlsSegmentDuration: 1s
+# 시청자가 없어도 항상 리먹스 → 대시보드 접속 즉시 재생 시작 (데모에 유리)
+hlsAlwaysRemux: true
+# 브라우저 cross-origin 재생 허용
+hlsAllowOrigins: ['*']
+
+# --- WebRTC: 저지연 재생 (STREAM_MODE=webrtc 일 때 사용) ---
+webrtc: true
+webrtcAddress: :8889
+webrtcAllowOrigins: ['*']
+# 로컬 네트워크 데모: 추가 ICE 서버 불필요
+webrtcLocalUDPAddress: :8189
+
+# --- 경로 정의 ---
+paths:
+  # 카메라 스트림 경로. camera_stream.py 가 이 경로로 publish 한다.
+  cam:
+    source: publisher
